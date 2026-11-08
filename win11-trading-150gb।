@@ -1,0 +1,44 @@
+
+name: Windows 11 Trading Workstation
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  trading:
+    name: Windows 11 Desktop
+    runs-on:
+      labels: win11-trading-150gb
+    timeout-minutes: 360
+
+    steps:
+      - name: Windows Version
+        shell: pwsh
+        run: |
+          Get-ComputerInfo |
+            Select-Object WindowsProductName,
+            WindowsVersion, OsArchitecture
+
+      - name: CPU Information
+        shell: pwsh
+        run: |
+          Get-CimInstance Win32_Processor |
+            Select-Object Name, NumberOfCores,
+            NumberOfLogicalProcessors
+
+      - name: RAM Information
+        shell: pwsh
+        run: |
+          Get-CimInstance Win32_OperatingSystem |
+            Select-Object TotalVisibleMemorySize,
+            FreePhysicalMemory
+
+      - name: SSD Information
+        shell: pwsh
+        run: |
+          Get-Volume |
+            Select-Object DriveLetter,
+            FileSystemLabel, Size, SizeRemaining
